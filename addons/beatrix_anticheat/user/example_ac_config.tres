@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dehd4506t32ym"]
+
+[ext_resource type="Script" uid="uid://mwey3rfac2xs" path="res://addons/beatrix_anticheat/core/anticheat_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+max_violations_per_minute = 32
+banned_cmdline_substrings = null
+suspicious_env_var_names = null
+scene_sanity_paths = PackedStringArray("AntiCheat")
+process_scan_interval_sec = 1.0
+suspicious_process_substrings = PackedStringArray("cheat engine", "cheatengine", "cheatengine-x86_64", "cheatengine-i386")
+injector_module_scan_enabled = true
+use_startup_dll_only = true
+injector_module_scan_interval_sec = 3.0
+suspicious_module_substrings = PackedStringArray()
+integrity_paths = PackedStringArray()
+integrity_expected_md5 = PackedStringArray()
+in_game_dev_overlay_enabled = true
+dev_menu_allow_in_release = true
+dev_menu_password = "beatrix-dev"

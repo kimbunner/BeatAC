@@ -1,0 +1,33 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Beatrix AntiCheat"
+config/description="Demo project for the Beatrix AntiCheat Godot addon."
+run/main_scene="res://addons/beatrix_anticheat/demo/play.tscn"
+config/features=PackedStringArray("4.5", "Forward Plus")
+
+[autoload]
+
+AntiCheat="*res://addons/beatrix_anticheat/core/anticheat_director.gd"
+
+[beatrix_ac]
+
+config_path="res://addons/beatrix_anticheat/user/example_ac_config.tres"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/beatrix_anticheat/plugin.cfg")

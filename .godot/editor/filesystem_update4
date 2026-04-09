@@ -1,5 +1,0 @@
-res://control.tscn
-res://addons/beatrix_anticheat/user/example_ac_config.tres
-res://addons/beatrix_anticheat/core/anticheat_config.gd
-res://addons/beatrix_anticheat/core/anticheat_director.gd
-res://addons/beatrix_anticheat/scenes/halt.tscn

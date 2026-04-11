@@ -1,6 +1,3 @@
-# Normalize line endings for all files that Git considers text files.
-* text=auto eol=lf
-
 # Godot 4+ specific ignores
 .godot/
 
@@ -16,8 +13,3 @@ export_presets.cfg
 .mono/
 data_*/
 mono_crash.*.json
-
-# Only include the addons folder when downloading from the Asset Library.
-/**        export-ignore
-/addons    !export-ignore
-/addons/** !export-ignore

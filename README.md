@@ -1,6 +1,6 @@
 # BeatAC
 
-A lightweight **modding / injection helper tool** for Beat Banger, built with Godot.
+A lightweight **modding / injection helper tool**, built with Godot.
 
 > ⚠️ This project is experimental. Expect bugs.
 

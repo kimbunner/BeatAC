@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0lby2aii08c5"]
+[gd_scene format=3 uid="uid://d0lby2aii08c5"]
 
 [ext_resource type="Script" uid="uid://d1tioa3puo31o" path="res://addons/beatrix_anticheat/scenes/halt.gd" id="1_h66eg"]
 
-[node name="Halt" type="Control"]
+[node name="Halt" type="Control" unique_id=519785925]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,13 +11,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h66eg")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1539612341]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.15, 0.02, 0.02, 1)
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=149281991]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" format=3 uid="uid://dehd4506t32ym"]
+[gd_resource type="Resource" format=3 uid="uid://d0wo8qbx8vdcm"]
 
 [ext_resource type="Script" uid="uid://mwey3rfac2xs" path="res://addons/beatrix_anticheat/core/anticheat_config.gd" id="1"]
 
@@ -11,7 +11,7 @@ scene_sanity_paths = PackedStringArray("AntiCheat")
 process_scan_interval_sec = 1.0
 suspicious_process_substrings = PackedStringArray("cheat engine", "cheatengine", "cheatengine-x86_64", "cheatengine-i386")
 injector_module_scan_enabled = true
-trusted_directories = null
+trusted_directories = PackedStringArray()
 use_startup_dll_only = true
 injector_module_scan_interval_sec = 3.0
 suspicious_module_substrings = PackedStringArray()

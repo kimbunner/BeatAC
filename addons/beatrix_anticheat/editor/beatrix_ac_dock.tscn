@@ -1,11 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://beatrix_ac_editor_dock"]
+[gd_scene format=3 uid="uid://bne8woj28ombc"]
 
-[ext_resource type="Script" path="res://addons/beatrix_anticheat/editor/beatrix_ac_dock.gd" id="1"]
+[ext_resource type="Script" uid="uid://dfs5gehmsucf0" path="res://addons/beatrix_anticheat/editor/beatrix_ac_dock.gd" id="1"]
 
-[node name="BeatrixACDock" type="VBoxContainer"]
+[node name="BeatrixACDock" type="VBoxContainer" unique_id=1893879736]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 280.0
 offset_bottom = 220.0
+theme_override_constants/separation = 8
 script = ExtResource("1")

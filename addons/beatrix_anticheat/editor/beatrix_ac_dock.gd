@@ -6,11 +6,51 @@ const _META := &"beatrix_plugin"
 const _Obf := preload("res://addons/beatrix_anticheat/core/beatrix_obf.gd")
 
 
+func _ensure_dir_exists(path: String) -> bool:
+	"""Create parent directories for a resource path if they don't exist."""
+	var dir_path = path.get_base_dir()
+	if dir_path.is_empty() or dir_path == "res://":
+		return true
+	var err = DirAccess.make_dir_recursive_absolute(dir_path)
+	if err != OK:
+		push_warning("BeatrixAC: Failed to create directory %s: %s" % [dir_path, error_string(err)])
+		return false
+	return true
+
+
+func _create_default_config(path: String) -> Resource:
+	"""Create a config resource with all default values from anticheat_config.gd."""
+	var config_script = load("res://addons/beatrix_anticheat/core/anticheat_config.gd")
+	if config_script == null:
+		push_error("BeatrixAC: Failed to load anticheat_config.gd script")
+		return null
+	
+	var config = config_script.new()
+	_ensure_dir_exists(path)
+	
+	var err = ResourceSaver.save(config, path)
+	if err != OK:
+		push_error("BeatrixAC: Failed to save config to %s: %s" % [path, error_string(err)])
+		return null
+	
+	return config
+
+
 func _ready() -> void:
 	add_theme_constant_override("separation", 8)
-	var plugin: EditorPlugin = get_meta(_META) as EditorPlugin
+	# Defer initialization to allow plugin to set meta before _ready completes
+	call_deferred(&"_setup_ui")
+
+
+
+func _setup_ui() -> void:
+	var plugin: EditorPlugin = null
+	if has_meta(_META):
+		plugin = get_meta(_META) as EditorPlugin
+	
+	# If meta is not yet available, defer again
 	if plugin == null:
-		push_error("BeatrixAC: dock missing editor plugin meta.")
+		call_deferred(&"_setup_ui")
 		return
 
 	var title := Label.new()
@@ -38,7 +78,11 @@ func _ready() -> void:
 	path_le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if ProjectSettings.has_setting("beatrix_ac/config_path"):
 		path_le.text = str(ProjectSettings.get_setting("beatrix_ac/config_path", ""))
-	path_le.placeholder_text = "res://addons/beatrix_anticheat/user/example_ac_config.tres"
+		var config_path = str(ProjectSettings.get_setting("beatrix_ac/config_path", ""))
+		if !ResourceLoader.exists(config_path):
+			# Create config with default values at the specified path
+			_create_default_config(config_path)
+	path_le.placeholder_text = "res://addons/beatrix_anticheat/user/ac_config.tres"
 	path_row.add_child(path_le)
 	add_child(path_row)
 
@@ -61,11 +105,20 @@ func _ready() -> void:
 	open_btn.pressed.connect(
 		func() -> void:
 			var path: String = path_le.text.strip_edges()
-			if not ResourceLoader.exists(path):
-				push_warning("BeatrixAC: resource does not exist: %s" % path)
+			if path.is_empty():
+				push_warning("BeatrixAC: config_path is empty")
 				return
-			var res: Resource = load(path)
-			plugin.get_editor_interface().edit_resource(res)
+			
+			# Create config with defaults if it doesn't exist
+			if not ResourceLoader.exists(path):
+				var res = _create_default_config(path)
+				if res == null:
+					push_error("BeatrixAC: Failed to create config at %s" % path)
+					return
+				plugin.get_editor_interface().edit_resource(res)
+			else:
+				var res: Resource = load(path)
+				plugin.get_editor_interface().edit_resource(res)
 	)
 	add_child(open_btn)
 

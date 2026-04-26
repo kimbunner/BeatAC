@@ -116,8 +116,16 @@ extends Resource
 @export_group("In-process module / DLL scan (injectors)")
 ## Detects DLLs mapped into this process (Cheat Engine VEH/Hooks, Frida, etc.). Windows: PowerShell. Linux: /proc/self/maps. macOS: lsof.
 @export var injector_module_scan_enabled: bool = false
+@export var use_only_trusted_directory: bool = false
+@export var trusted_directories: PackedStringArray = PackedStringArray([
+	OS.get_executable_path().get_base_dir(),
+	"c:/system32/"
+])
 @export var use_startup_dll_only: bool = false
+## Delay trusting the DLL snapshot until this many seconds have passed (mitigates pre-launch injection).
+@export var startup_dll_warmup_sec: float = 2.0
 var startup_dll = []
+var _startup_dll_captured_at_sec: float = -1.0
 @export var injector_module_scan_interval_sec: float = 45.0
 @export var suspicious_module_substrings: PackedStringArray = PackedStringArray([
 	"cheatengine",

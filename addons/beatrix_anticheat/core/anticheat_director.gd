@@ -110,8 +110,7 @@ func _resolve_config_path() -> String:
 			return p
 	if ResourceLoader.exists("res://addons/beatrix_anticheat/user/ac_config.tres"):
 		return "res://addons/beatrix_anticheat/user/ac_config.tres"
-	if ResourceLoader.exists("res://addons/beatrix_anticheat/user/example_ac_config.tres"):
-		return "res://addons/beatrix_anticheat/user/example_ac_config.tres"
+	# Fall back to script defaults instead of example config
 	return ""
 
 
@@ -442,14 +441,14 @@ func _run_env_scan() -> void:
 			notify_violation(ViolationCode.ENV_TAMPER, "Environment `%s` is set." % name)
 			return
 
-
+# Thanks kS222138
 func _run_time_guard() -> void:
+	if Engine.is_editor_hint():
+		return
 	var wall: int = Time.get_ticks_msec() - _boot_wall_ms
 	var skew: float = abs(_accum_engine_ms - float(wall))
 	if skew > cfg.max_tick_skew_ms:
-		pass
-		#notify_violation(ViolationCode.TIME_SKEW, "Engine vs wall skew: %.1f ms" % skew)
-
+		notify_violation(ViolationCode.TIME_SKEW, "Engine vs wall skew: %.1f ms" % skew)
 
 func _run_negative_and_spike(delta: float) -> void:
 	if delta < 0.0:
@@ -699,7 +698,12 @@ func _match_injector_modules_blob(blob: String) -> void:
 				dlls_in_this_blob.append(cleaned)
 
 	if cfg.use_startup_dll_only and cfg.startup_dll.is_empty():
-		cfg.startup_dll = dlls_in_this_blob.duplicate()
+		# Snapshot DLLs, but filter by trusted paths if enabled
+		var snapshot_list = dlls_in_this_blob.duplicate()
+		if cfg.use_only_trusted_directory:
+			snapshot_list = _filter_dlls_by_trusted_paths(snapshot_list)
+		cfg.startup_dll = snapshot_list
+		cfg._startup_dll_captured_at_sec = Time.get_ticks_msec() / 1000.0
 		return
 
 	var blob_lower = blob.to_lower()
@@ -709,12 +713,30 @@ func _match_injector_modules_blob(blob: String) -> void:
 			return
 
 	if cfg.use_startup_dll_only:
+		# Wait for warmup window before enforcing the snapshot
+		var elapsed_sec = (Time.get_ticks_msec() / 1000.0) - cfg._startup_dll_captured_at_sec
+		if elapsed_sec < cfg.startup_dll_warmup_sec:
+			return
+		
 		for dll in dlls_in_this_blob:
 			if not dll in cfg.startup_dll:
 				if dll in ["dcomp.dll", "kernel32.dll", "ntdll.dll"]:
 					continue
 				_trigger_violation("Unauthorized module: %s" % dll)
 				return
+
+func _filter_dlls_by_trusted_paths(dll_list: Array) -> Array:
+	var filtered: Array = []
+	for dll_path: String in dll_list:
+		var dll_lower = dll_path.to_lower()
+		var is_trusted = false
+		for trusted_dir: String in cfg.trusted_directories:
+			if dll_lower.begins_with(trusted_dir.to_lower()):
+				is_trusted = true
+				break
+		if is_trusted:
+			filtered.append(dll_path)
+	return filtered
 
 func _clean_dll_name(raw: String) -> String:
 	var lower = raw.to_lower().strip_edges()

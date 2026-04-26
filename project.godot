@@ -8,20 +8,24 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Beatrix AntiCheat"
 config/description="Demo project for the Beatrix AntiCheat Godot addon."
 run/main_scene="res://addons/beatrix_anticheat/demo/play.tscn"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 
 [autoload]
 
-AntiCheat="*res://addons/beatrix_anticheat/core/anticheat_director.gd"
+AntiCheat="*uid://c6831q2ocw3tp"
 
 [beatrix_ac]
 
-config_path="res://addons/beatrix_anticheat/user/example_ac_config.tres"
+config_path="res://addons/beatrix_anticheat/user/ac_config2.tres"
 
 [display]
 

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" format=3 uid="uid://qfhgrwoorogo"]
+
+[ext_resource type="Script" uid="uid://mwey3rfac2xs" path="res://addons/beatrix_anticheat/core/anticheat_config.gd" id="1_q76sc"]
+
+[resource]
+script = ExtResource("1_q76sc")
+banned_cmdline_substrings = PackedStringArray("cheat", "trainer", "debug=yes", "--debug-collisions")
+suspicious_env_var_names = PackedStringArray("HTTP_PROXY", "GODOT_DEBUG")
+scene_sanity_paths = PackedStringArray("AntiCheat")
+suspicious_process_substrings = PackedStringArray("cheatengine", "cheatengine-x86_64", "cheatengine-i386", "cheat engine", "ceserver", "artmoney", "gameconqueror", "scanmem", "xenos", "injector.exe", "pinject", "reclass", "x64dbg", "x32dbg", "ollydbg", "ida64", "ida32", "windbg", "devenv", "dnspy", "ilspy", "processhacker", "httpdebugger", "fiddler", "hollowshunter", "systeminformer")
+trusted_directories = PackedStringArray("C:/Users/rayna/Desktop", "c:/system32/")
+suspicious_module_substrings = PackedStringArray("cheatengine", "cheat engine", "speedhack", "vehdebug", "dbk64", "dbk32", "ce-", "\\ce\\", "/ce/", "frida", "frida-gum", "easyhook", "easyhook32", "easyhook64", "minhook", "scripthook", "scripthookv", "megadumper", "xenos", "sharpinject", "assemblyinject")
+integrity_paths = PackedStringArray()
+integrity_expected_md5 = PackedStringArray()
